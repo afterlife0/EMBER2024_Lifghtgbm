@@ -1,0 +1,22 @@
+# Requirements for EMBER2024 Malware Detection Training Script
+
+# Core ML libraries
+lightgbm>=4.0.0
+xgboost>=2.0.0
+scikit-learn>=1.3.0
+
+# Data processing
+pandas>=2.0.0
+numpy>=1.24.0
+pyarrow>=12.0.0
+
+# Model persistence
+joblib>=1.3.0
+
+# Visualization libraries
+matplotlib>=3.7.0
+seaborn>=0.12.0
+plotly>=5.15.0
+
+# Utilities
+pathlib2>=2.3.0  # For older Python versions (optional)
