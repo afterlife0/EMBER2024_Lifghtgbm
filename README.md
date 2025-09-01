@@ -10,6 +10,7 @@ A comprehensive repository for malware detection using LightGBM, featuring utili
 - [System Requirements](#system-requirements)
 - [Directory Structure](#directory-structure)
 - [Installation](#installation)
+- [Step-by-Step Usage](#step-by-step-usage)
 - [Dataset Download](#dataset-download)
 - [Dataset Conversion](#dataset-conversion)
 - [Model Training](#model-training)
@@ -84,13 +85,73 @@ pip install lightgbm pandas numpy tqdm pyarrow huggingface_hub xgboost scikit-le
 
 ---
 
+## Step-by-Step Usage
+
+**Step 1: Download the Dataset**
+- Use `download.py` or `test.py` to download EMBER2024 data.
+
+```python
+from download import download_dataset
+
+download_dataset(download_dir="path/to/your/dataset", split="all", file_type="all")
+```
+or
+```bash
+python test.py
+```
+
+**Step 2: Convert the Dataset**
+- Use either extractor depending on your feature requirements.
+
+a) **Enhanced Feature Extraction:**
+```bash
+python enhanced_ember_extractor.py --input path/to/your/dataset --output path/to/processed/
+```
+
+b) **Ultra-Focused Feature Extraction:**
+```bash
+python ember_focused_extractor.py
+```
+(Default input directory: `a:/Collage/PROJECT/antivirus/ml2/data`  
+Default output directory: `a:/Collage/PROJECT/antivirus/ml2/ember2024_ultra_focused_features`)
+
+**Step 3: Train the Model**
+- Use the training script with your chosen scenario.  
+- **See all options:**  
+```bash
+python train_malware_models.py --help
+```
+- **Example commands:**
+
+Production-ready (Win32, LightGBM & XGBoost):
+```bash
+python train_malware_models.py --category Win32 --data_dir ember2024_ultra_focused_features --output_dir optimal_models --sample_size 1000000 --models lightgbm xgboost --cv_folds 5 --val_size 0.2 --early_stopping_rounds 50 --random_state 42
+```
+
+Multi-category:
+```bash
+python train_malware_models.py --category Win32 Win64 APK --data_dir ember2024_ultra_focused_features --output_dir multi_category_models --sample_size 1500000 --models lightgbm xgboost --cv_folds 5 --val_size 0.2
+```
+
+(See [TRAINING_COMMANDS_GUIDE.txt](TRAINING_COMMANDS_GUIDE.txt) for more scenarios and parameter explanations.)
+
+**Step 4: Run Malware Detection**
+- Use `malware_detactor.py` for inference on new samples.
+
+```bash
+python malware_detactor.py --model model.txt --input data/test_samples/ --output detection_results.csv
+```
+- `--model`: Path to trained model
+- `--input`: Input samples (directory or features)
+- `--output`: CSV file for results
+
+---
+
 ## Dataset Download
 
 Download the EMBER dataset using the provided Python utilities in the `thrember` directory.
 
 ### Using the Python API
-
-You can use `download.py` directly:
 
 ```python
 from download import download_dataset
@@ -106,9 +167,6 @@ python test.py
 
 ### Command-line Usage
 
-You can adapt the code in `download.py` to create an argument parser for command-line options. 
-If refactored, you could use:
-
 ```bash
 python thrember/download.py --download_dir "path/to/your/dataset" --split "all" --file_type "all"
 ```
@@ -123,8 +181,6 @@ python thrember/download.py --download_dir "path/to/your/dataset" --split "all" 
 
 ### Convert to Enhanced Feature Format
 
-To convert the downloaded EMBER dataset into feature-rich format using `enhanced_ember_extractor.py`:
-
 ```bash
 python enhanced_ember_extractor.py --input data/ember2024/ --output data/processed/
 ```
@@ -132,8 +188,6 @@ python enhanced_ember_extractor.py --input data/ember2024/ --output data/process
 - `--output`: Path where processed feature files will be written.
 
 ### Convert to Ultra-Focused Feature Format
-
-To extract only ultra-focused features (histogram, byteentropy, entropy fields, label, family) using `ember_focused_extractor.py`:
 
 ```bash
 python ember_focused_extractor.py
