@@ -51,7 +51,9 @@ EMBER2024_Lifghtgbm/
 ├── test.py                       # Example usage for dataset download
 ├── enhanced_ember_extractor.py   # Dataset conversion to features
 ├── ember_focused_extractor.py    # Ultra-focused features extractor
-├── training_commands_guide.txt   # Model training command references
+├── train_malware_models.py       # Model training script (LightGBM/XGBoost)
+├── TRAINING_COMMANDS_GUIDE.txt   # Detailed training command scenarios and parameters
+├── training_commands_guide.txt   # Model training command references (alias)
 ├── malware_detactor.py           # Malware detection script
 ├── README.md
 └── ... (other files)
@@ -77,7 +79,7 @@ pip install -r requirements.txt
 Additional dependencies may include:
 
 ```bash
-pip install lightgbm pandas numpy tqdm pyarrow huggingface_hub
+pip install lightgbm pandas numpy tqdm pyarrow huggingface_hub xgboost scikit-learn seaborn matplotlib
 ```
 
 ---
@@ -93,7 +95,7 @@ You can use `download.py` directly:
 ```python
 from download import download_dataset
 
-download_dataset(download_dir="A:/Collage/PROJECT/antivirus/ml2/data", split="all", file_type="all")
+download_dataset(download_dir="path/to/your/dataset", split="all", file_type="all")
 ```
 
 Or run the example script:
@@ -108,7 +110,7 @@ You can adapt the code in `download.py` to create an argument parser for command
 If refactored, you could use:
 
 ```bash
-python thrember/download.py --download_dir "A:/Collage/PROJECT/antivirus/ml2/data" --split "all" --file_type "all"
+python thrember/download.py --download_dir "path/to/your/dataset" --split "all" --file_type "all"
 ```
 **Parameters:**
 - `download_dir`: Target folder for the downloaded dataset.
@@ -181,19 +183,51 @@ If you encounter MemoryError or system slowdown:
 > **Note:**  
 > Models are trained on converted EMBER2024 `.jsonl` files to tabular `.parquet` files, which are split by submission dates. This allows for efficient training and validation using temporal splits.
 
-Refer to `training_commands_guide.txt` for detailed training commands. Typical commands include:
+### Main Training Script
+
+All training commands should be executed via:
 
 ```bash
-lightgbm config=train.conf
+python train_malware_models.py [OPTIONS]
 ```
-
-Or using a Python interface:
-
+To see all available options, arguments, and parameter descriptions, run:
 ```bash
-python train_model.py --data data/processed/ --output model.txt
+python train_malware_models.py --help
 ```
 
-See `training_commands_guide.txt` for the full set of recommended commands and configuration options for LightGBM training.
+### Example Training Commands
+
+#### 1. Production-Ready Training (Win32, LightGBM & XGBoost)
+```bash
+python train_malware_models.py --category Win32 --data_dir ember2024_ultra_focused_features --output_dir optimal_models --sample_size 1000000 --models lightgbm xgboost --cv_folds 5 --val_size 0.2 --early_stopping_rounds 50 --random_state 42
+```
+
+#### 2. Multi-Category Comprehensive Training (Win32, Win64, APK)
+```bash
+python train_malware_models.py --category Win32 Win64 APK --data_dir ember2024_ultra_focused_features --output_dir multi_category_models --sample_size 1500000 --models lightgbm xgboost --cv_folds 5 --val_size 0.2
+```
+
+#### 3. All Categories Training (Universal Detector)
+```bash
+python train_malware_models.py --category all --data_dir ember2024_ultra_focused_features --output_dir universal_models --sample_size 2000000 --models lightgbm xgboost --cv_folds 5 --val_size 0.2
+```
+
+#### 4. Optimized LightGBM Training
+```bash
+python train_malware_models.py --category Win32 --data_dir ember2024_ultra_focused_features --output_dir best_lightgbm_models --sample_size 1500000 --models lightgbm --cv_folds 7 --val_size 0.15 --early_stopping_rounds 100 --random_state 42 --lgb_n_estimators 5000 --lgb_num_leaves 63 --lgb_learning_rate 0.08 --lgb_feature_fraction 0.95 --lgb_bagging_fraction 0.95 --lgb_bagging_freq 3 --lgb_min_child_samples 25
+```
+
+#### 5. Fast Development Training
+```bash
+python train_malware_models.py --category Win32 --data_dir ember2024_ultra_focused_features --output_dir fast_models --sample_size 100000 --models lightgbm xgboost --cv_folds 3 --val_size 0.2 --early_stopping_rounds 30 --random_state 42 --lgb_learning_rate 0.1 --lgb_n_estimators 500 --xgb_learning_rate 0.1 --xgb_n_estimators 500
+```
+
+#### 6. Memory-Efficient Training
+```bash
+python train_malware_models.py --category Win32 --data_dir ember2024_ultra_focused_features --output_dir memory_efficient_models --sample_size 500000 --models lightgbm xgboost --cv_folds 5 --val_size 0.2 --early_stopping_rounds 50 --random_state 42
+```
+
+> For more scenarios, parameters, and troubleshooting, see the full [TRAINING_COMMANDS_GUIDE.txt](TRAINING_COMMANDS_GUIDE.txt) in this repository.
 
 ---
 
@@ -222,6 +256,7 @@ python malware_detactor.py --model model.txt --input data/test_samples/ --output
 - [Hugging Face Hub](https://huggingface.co/docs/hub/index)
 - [PyArrow Documentation](https://arrow.apache.org/docs/python/)
 - [Pandas Documentation](https://pandas.pydata.org/docs/)
+- [TRAINING_COMMANDS_GUIDE.txt](TRAINING_COMMANDS_GUIDE.txt)
 
 ---
 
