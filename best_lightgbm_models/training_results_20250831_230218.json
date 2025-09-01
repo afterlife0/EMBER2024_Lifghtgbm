@@ -1,0 +1,78 @@
+{
+  "Win32": {
+    "category": "Win32",
+    "lightgbm": {
+      "model_path": "best_lightgbm_models\\lightgbm_win32_model.txt",
+      "metrics": {
+        "accuracy": 0.9832355555555555,
+        "precision": 0.9858292355833705,
+        "recall": 0.9805517020595454,
+        "f1_score": 0.9831833866840243,
+        "specificity": 0.9859171198066603,
+        "sensitivity": 0.9805517020595454,
+        "balanced_accuracy": 0.9832344109331028,
+        "roc_auc": 0.9981434455484443,
+        "pr_auc": 0.9983096215975319,
+        "avg_precision": 0.9983096293789987,
+        "matthews_corrcoef": 0.9664848659756197,
+        "cohen_kappa": 0.9664710284559872,
+        "log_loss": 0.049621337238907055,
+        "brier_score": 0.013072243310314539,
+        "false_positive_rate": 0.01408288019333973,
+        "false_negative_rate": 0.019448297940454592,
+        "positive_predictive_value": 0.9858292355833705,
+        "negative_predictive_value": 0.9806716747680071,
+        "true_positives": 110265,
+        "true_negatives": 110963,
+        "false_positives": 1585,
+        "false_negatives": 2187,
+        "training_time": 1155.4020137786865,
+        "best_iteration": 5000
+      },
+      "visualizations": [
+        "best_lightgbm_models\\visualizations\\roc_curve_lightgbm_Win32.png",
+        "best_lightgbm_models\\visualizations\\pr_curve_lightgbm_Win32.png",
+        "best_lightgbm_models\\visualizations\\confusion_matrix_lightgbm_Win32.png",
+        "best_lightgbm_models\\visualizations\\feature_importance_lightgbm_Win32.png",
+        "best_lightgbm_models\\visualizations\\cv_results_lightgbm_Win32.png"
+      ],
+      "cv_results": {
+        "cv_mean": 0.998090883483134,
+        "cv_std": 4.53252693403966e-05,
+        "cv_scores": [
+          0.9980749969351077,
+          0.9980221096742433,
+          0.9981043833446787,
+          0.9980950218852502,
+          0.9981368913448716,
+          0.9980428177974009,
+          0.9981599634003855
+        ]
+      },
+      "test_metrics": {
+        "accuracy": 0.9661722222222222,
+        "precision": 0.976870006024028,
+        "recall": 0.9549555555555556,
+        "f1_score": 0.9657884830403245,
+        "specificity": 0.9773888888888889,
+        "sensitivity": 0.9549555555555556,
+        "balanced_accuracy": 0.9661722222222222,
+        "roc_auc": 0.9952763166512346,
+        "pr_auc": 0.9955804798136958,
+        "avg_precision": 0.995580492369373,
+        "matthews_corrcoef": 0.9325791362731496,
+        "cohen_kappa": 0.9323444444444444,
+        "log_loss": 0.09230381444133111,
+        "brier_score": 0.025680896576084276,
+        "false_positive_rate": 0.02261111111111111,
+        "false_negative_rate": 0.04504444444444444,
+        "positive_predictive_value": 0.976870006024028,
+        "negative_predictive_value": 0.9559438811549789,
+        "true_positives": 343784,
+        "true_negatives": 351860,
+        "false_positives": 8140,
+        "false_negatives": 16216
+      }
+    }
+  }
+}

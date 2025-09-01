@@ -1,0 +1,78 @@
+{
+  "Win64": {
+    "category": "Win64",
+    "lightgbm": {
+      "model_path": "lgm_win64\\lightgbm_win64_model.txt",
+      "metrics": {
+        "accuracy": 0.997525641025641,
+        "precision": 0.9978958712889071,
+        "recall": 0.9971538461538462,
+        "f1_score": 0.997524720729502,
+        "specificity": 0.9978974358974358,
+        "sensitivity": 0.9971538461538462,
+        "balanced_accuracy": 0.997525641025641,
+        "roc_auc": 0.9998799467455621,
+        "pr_auc": 0.9998923020671135,
+        "avg_precision": 0.9998923031691538,
+        "matthews_corrcoef": 0.9950515571461128,
+        "cohen_kappa": 0.995051282051282,
+        "log_loss": 0.008482159070092685,
+        "brier_score": 0.0019634236306183325,
+        "false_positive_rate": 0.0021025641025641025,
+        "false_negative_rate": 0.0028461538461538463,
+        "positive_predictive_value": 0.9978958712889071,
+        "negative_predictive_value": 0.9971559609521126,
+        "true_positives": 77778,
+        "true_negatives": 77836,
+        "false_positives": 164,
+        "false_negatives": 222,
+        "training_time": 698.6213383674622,
+        "best_iteration": 4058
+      },
+      "visualizations": [
+        "lgm_win64\\visualizations\\roc_curve_lightgbm_Win64.png",
+        "lgm_win64\\visualizations\\pr_curve_lightgbm_Win64.png",
+        "lgm_win64\\visualizations\\confusion_matrix_lightgbm_Win64.png",
+        "lgm_win64\\visualizations\\feature_importance_lightgbm_Win64.png",
+        "lgm_win64\\visualizations\\cv_results_lightgbm_Win64.png"
+      ],
+      "cv_results": {
+        "cv_mean": 0.9998438416415036,
+        "cv_std": 3.281109178182977e-05,
+        "cv_scores": [
+          0.9998790675167902,
+          0.9998383274289186,
+          0.9998990081344804,
+          0.9998057191343193,
+          0.9998109126387642,
+          0.9998540766507327,
+          0.9998197799865198
+        ]
+      },
+      "test_metrics": {
+        "accuracy": 0.9730416666666667,
+        "precision": 0.9783594289855561,
+        "recall": 0.9674833333333334,
+        "f1_score": 0.9728909857290104,
+        "specificity": 0.9786,
+        "sensitivity": 0.9674833333333334,
+        "balanced_accuracy": 0.9730416666666667,
+        "roc_auc": 0.9959683830555557,
+        "pr_auc": 0.9962769845825574,
+        "avg_precision": 0.9962770163716311,
+        "matthews_corrcoef": 0.9461417973727079,
+        "cohen_kappa": 0.9460833333333334,
+        "log_loss": 0.09386135208128447,
+        "brier_score": 0.02183470050687745,
+        "false_positive_rate": 0.0214,
+        "false_negative_rate": 0.032516666666666666,
+        "positive_predictive_value": 0.9783594289855561,
+        "negative_predictive_value": 0.9678408360393624,
+        "true_positives": 116098,
+        "true_negatives": 117432,
+        "false_positives": 2568,
+        "false_negatives": 3902
+      }
+    }
+  }
+}
