@@ -22,105 +22,105 @@ Dataset Information:
 1. OPTIMAL TRAINING COMMANDS
 ===============================================================================
 
-1.1 PRODUCTION-READY TRAINING (RECOMMENDED)
--------------------------------------------
-Purpose: Best balance of performance and generalization
+1.1 PRODUCTION-READY TRAINING (RECOMMENDED - ANTI-OVERFITTING)
+-------------------------------------------------------------
+Purpose: Best balance of performance and generalization with overfitting prevention
 Dataset: Win32 (largest, most diverse)
 Sample Size: 1,000,000 samples
-Models: Both LightGBM and XGBoost
+Models: LightGBM, XGBoost, and Random Forest
 
 Command:
-python train_malware_models.py --category Win32 --data_dir ember2024_merged_categories --output_dir optimal_models --sample_size 1000000 --models lightgbm xgboost --cv_folds 5 --val_size 0.2 --early_stopping_rounds 50 --random_state 42 --lgb_n_estimators 2000 --lgb_num_leaves 31 --lgb_learning_rate 0.05 --lgb_feature_fraction 0.8 --lgb_bagging_fraction 0.8 --lgb_bagging_freq 5 --lgb_min_child_samples 50 --xgb_n_estimators 2000 --xgb_max_depth 5 --xgb_learning_rate 0.05 --xgb_subsample 0.8 --xgb_colsample_bytree 0.8 --xgb_min_child_weight 3 --xgb_reg_alpha 0.1 --xgb_reg_lambda 1.0
+python train_malware_models.py --category Win32 --data_dir ember2024_ultra_focused_features --output_dir optimal_models --sample_size 1000000 --models lightgbm xgboost randomforest --cv_folds 5 --val_size 0.25 --early_stopping_rounds 30 --random_state 42 --lgb_n_estimators 1500 --lgb_num_leaves 31 --lgb_learning_rate 0.03 --lgb_feature_fraction 0.7 --lgb_bagging_fraction 0.7 --lgb_bagging_freq 5 --lgb_min_child_samples 100 --xgb_n_estimators 1500 --xgb_max_depth 4 --xgb_learning_rate 0.03 --xgb_subsample 0.7 --xgb_colsample_bytree 0.7 --xgb_min_child_weight 5 --xgb_reg_alpha 0.2 --xgb_reg_lambda 2.0 --rf_n_estimators 300 --rf_max_depth 10 --rf_min_samples_split 10 --rf_min_samples_leaf 5
 
-Expected Training Time: 10-15 minutes
-Expected Performance: >95% AUC with good generalization
+Expected Training Time: 15-20 minutes
+Expected Performance: >93% AUC with excellent generalization and reduced overfitting
 
-1.2 MULTI-CATEGORY COMPREHENSIVE TRAINING
------------------------------------------
-Purpose: Train on multiple file types for broader coverage
+1.2 MULTI-CATEGORY COMPREHENSIVE TRAINING (ANTI-OVERFITTING)
+-----------------------------------------------------------
+Purpose: Train on multiple file types for broader coverage with overfitting prevention
 Dataset: Win32 + Win64 + APK (covers Windows and Android)
 Sample Size: 1,500,000 samples (distributed across categories)
 
 Command:
-python train_malware_models.py --category Win32 Win64 APK --data_dir ember2024_merged_categories --output_dir multi_category_models --sample_size 1500000 --models lightgbm xgboost --cv_folds 5 --val_size 0.2 --early_stopping_rounds 50 --random_state 42 --lgb_learning_rate 0.05 --lgb_feature_fraction 0.8 --lgb_bagging_fraction 0.8 --lgb_min_child_samples 50 --xgb_learning_rate 0.05 --xgb_max_depth 5 --xgb_subsample 0.8 --xgb_colsample_bytree 0.8 --xgb_reg_alpha 0.1 --xgb_reg_lambda 1.0
+python train_malware_models.py --category Win32 Win64 APK --data_dir ember2024_ultra_focused_features --output_dir multi_category_models --sample_size 1500000 --models lightgbm xgboost randomforest --cv_folds 5 --val_size 0.25 --early_stopping_rounds 30 --random_state 42 --lgb_learning_rate 0.03 --lgb_num_leaves 31 --lgb_feature_fraction 0.7 --lgb_bagging_fraction 0.7 --lgb_min_child_samples 100 --xgb_learning_rate 0.03 --xgb_max_depth 4 --xgb_subsample 0.7 --xgb_colsample_bytree 0.7 --xgb_reg_alpha 0.2 --xgb_reg_lambda 2.0 --rf_n_estimators 300 --rf_max_depth 10
 
-Expected Training Time: 15-20 minutes
-Coverage: Windows PE files and Android APK files
+Expected Training Time: 20-25 minutes
+Coverage: Windows PE files and Android APK files with reduced overfitting
 
-1.3 ALL CATEGORIES TRAINING
----------------------------
-Purpose: Maximum coverage across all file types
+1.3 ALL CATEGORIES TRAINING (ANTI-OVERFITTING)
+----------------------------------------------
+Purpose: Maximum coverage across all file types with overfitting prevention
 Dataset: All 6 categories (Win32, Win64, APK, PDF, ELF, .NET)
 Sample Size: 2,000,000 samples (smart distributed)
 
 Command:
-python train_malware_models.py --category all --data_dir ember2024_merged_categories --output_dir universal_models --sample_size 2000000 --models lightgbm xgboost --cv_folds 5 --val_size 0.2 --early_stopping_rounds 50 --random_state 42 --lgb_learning_rate 0.05 --lgb_feature_fraction 0.8 --lgb_bagging_fraction 0.8 --lgb_min_child_samples 50 --xgb_learning_rate 0.05 --xgb_max_depth 5 --xgb_subsample 0.8 --xgb_colsample_bytree 0.8 --xgb_reg_alpha 0.1 --xgb_reg_lambda 1.0
+python train_malware_models.py --category all --data_dir ember2024_ultra_focused_features --output_dir universal_models --sample_size 2000000 --models lightgbm xgboost randomforest --cv_folds 5 --val_size 0.25 --early_stopping_rounds 30 --random_state 42 --lgb_learning_rate 0.03 --lgb_num_leaves 31 --lgb_feature_fraction 0.7 --lgb_bagging_fraction 0.7 --lgb_min_child_samples 100 --xgb_learning_rate 0.03 --xgb_max_depth 4 --xgb_subsample 0.7 --xgb_colsample_bytree 0.7 --xgb_reg_alpha 0.2 --xgb_reg_lambda 2.0 --rf_n_estimators 300 --rf_max_depth 10
 
-Expected Training Time: 20-30 minutes
-Coverage: Universal malware detector for all file types
+Expected Training Time: 25-35 minutes
+Coverage: Universal malware detector for all file types with excellent generalization
 
-1.4 LIGHTGBM BEST PERFORMANCE TRAINING ⭐ (MAXIMUM RESULTS)
-----------------------------------------------------------
-Purpose: Achieve absolute best LightGBM performance with optimized parameters
-Dataset: Win32 (largest dataset for maximum learning)
+1.4 CONSERVATIVE TRAINING (MAXIMUM ANTI-OVERFITTING) ⭐
+------------------------------------------------------
+Purpose: Minimize overfitting for deployment in production environments
+Dataset: Win32 (largest dataset for stable training)
 Sample Size: 1,500,000 samples
-Model: LightGBM only (optimized for best results)
+Models: LightGBM, XGBoost, and Random Forest with conservative parameters
 
 Command:
-python train_malware_models.py --category Win32 --data_dir ember2024_merged_categories --output_dir best_lightgbm_models --sample_size 1500000 --models lightgbm --cv_folds 7 --val_size 0.15 --early_stopping_rounds 100 --random_state 42 --lgb_n_estimators 5000 --lgb_num_leaves 63 --lgb_learning_rate 0.08 --lgb_feature_fraction 0.95 --lgb_bagging_fraction 0.95 --lgb_bagging_freq 3 --lgb_min_child_samples 25
+python train_malware_models.py --category Win32 --data_dir ember2024_ultra_focused_features --output_dir conservative_models --sample_size 1500000 --models lightgbm xgboost randomforest --cv_folds 7 --val_size 0.3 --early_stopping_rounds 20 --random_state 42 --lgb_n_estimators 1000 --lgb_num_leaves 15 --lgb_learning_rate 0.02 --lgb_feature_fraction 0.6 --lgb_bagging_fraction 0.6 --lgb_bagging_freq 7 --lgb_min_child_samples 150 --xgb_n_estimators 1000 --xgb_max_depth 3 --xgb_learning_rate 0.02 --xgb_subsample 0.6 --xgb_colsample_bytree 0.6 --xgb_min_child_weight 10 --xgb_reg_alpha 0.5 --xgb_reg_lambda 5.0 --rf_n_estimators 200 --rf_max_depth 8 --rf_min_samples_split 20 --rf_min_samples_leaf 10
 
-Performance Optimizations:
-- Higher num_leaves (63 vs 31): More complex trees for better fitting
-- Optimized learning_rate (0.08): Balance between speed and accuracy
-- High feature/bagging fractions (0.95): Use most data for best results
-- Extended estimators (5000): Allow model to fully converge
-- Larger validation set: More reliable performance estimation
-- 7-fold CV: Robust evaluation without excessive computation
-- Extended early stopping (100): Prevent premature stopping
+Performance Features:
+- Ultra-low learning rates (0.02): Maximum stability
+- Conservative tree complexity: Prevents overfitting
+- Strong regularization: L1=0.5, L2=5.0 for XGBoost
+- Aggressive feature subsampling: 60% feature usage
+- Large validation set (30%): Robust evaluation
+- 7-fold CV: Comprehensive performance assessment
+- Early stopping (20 rounds): Prevents overtraining
 
-Expected Training Time: 15-20 minutes
-Expected Performance: >97% AUC with excellent generalization
-Memory Usage: 10-14 GB
-Best for: Production deployment requiring maximum accuracy
+Expected Training Time: 20-25 minutes
+Expected Performance: >91% AUC with maximum generalization
+Memory Usage: 10-12 GB
+Best for: Production deployment requiring maximum stability
 
-1.5 CATEGORY-SPECIFIC BEST LIGHTGBM TRAINING ⭐
------------------------------------------------
+1.5 CATEGORY-SPECIFIC ANTI-OVERFITTING TRAINING ⭐
+--------------------------------------------------
 
-1.5.1 WIN32 BEST LIGHTGBM (MAXIMUM PERFORMANCE)
+1.5.1 WIN32 CONSERVATIVE TRAINING
 Command:
-python train_malware_models.py --category Win32 --data_dir ember2024_merged_categories --output_dir best_lightgbm_win32 --sample_size 1500000 --models lightgbm --cv_folds 7 --val_size 0.15 --early_stopping_rounds 100 --random_state 42 --lgb_n_estimators 5000 --lgb_num_leaves 63 --lgb_learning_rate 0.08 --lgb_feature_fraction 0.95 --lgb_bagging_fraction 0.95 --lgb_bagging_freq 3 --lgb_min_child_samples 25
+python train_malware_models.py --category Win32 --data_dir ember2024_ultra_focused_features --output_dir conservative_win32 --sample_size 1500000 --models lightgbm xgboost randomforest --cv_folds 7 --val_size 0.25 --early_stopping_rounds 30 --random_state 42 --lgb_n_estimators 1500 --lgb_num_leaves 31 --lgb_learning_rate 0.03 --lgb_feature_fraction 0.7 --lgb_bagging_fraction 0.7 --lgb_bagging_freq 5 --lgb_min_child_samples 100 --rf_n_estimators 300 --rf_max_depth 10
 
-Expected: 97-99% AUC, 15-20 min, 10-14 GB RAM
+Expected: 93-95% AUC, 20-25 min, 10-12 GB RAM
 
-1.5.2 WIN64 BEST LIGHTGBM
+1.5.2 WIN64 CONSERVATIVE TRAINING
 Command:
-python train_malware_models.py --category Win64 --data_dir ember2024_merged_categories --output_dir best_lightgbm_win64 --sample_size 1000000 --models lightgbm --cv_folds 7 --val_size 0.15 --early_stopping_rounds 100 --random_state 42 --lgb_n_estimators 4500 --lgb_num_leaves 63 --lgb_learning_rate 0.08 --lgb_feature_fraction 0.95 --lgb_bagging_fraction 0.95 --lgb_bagging_freq 3 --lgb_min_child_samples 25
+python train_malware_models.py --category Win64 --data_dir ember2024_ultra_focused_features --output_dir conservative_win64 --sample_size 1000000 --models lightgbm xgboost randomforest --cv_folds 7 --val_size 0.25 --early_stopping_rounds 30 --random_state 42 --lgb_n_estimators 1200 --lgb_num_leaves 31 --lgb_learning_rate 0.03 --lgb_feature_fraction 0.7 --lgb_bagging_fraction 0.7 --lgb_bagging_freq 5 --lgb_min_child_samples 100 --rf_n_estimators 250 --rf_max_depth 10
 
-Expected: 96-98% AUC, 12-15 min, 8-10 GB RAM
+Expected: 92-94% AUC, 15-18 min, 8-10 GB RAM
 
-1.5.3 APK BEST LIGHTGBM
+1.5.3 APK CONSERVATIVE TRAINING (CORRECTED)
 Command:
-python train_malware_models.py --category APK --data_dir ember2024_merged_categories --output_dir best_lightgbm_apk --models lightgbm --cv_folds 7 --val_size 0.15 --early_stopping_rounds 100 --random_state 42 --lgb_n_estimators 4000 --lgb_num_leaves 63 --lgb_learning_rate 0.09 --lgb_feature_fraction 0.95 --lgb_bagging_fraction 0.95 --lgb_bagging_freq 3 --lgb_min_child_samples 20
+python train_malware_models.py --category APK --data_dir ember2024_ultra_focused_features --output_dir conservative_apk --models lightgbm xgboost randomforest --cv_folds 7 --val_size 0.25 --early_stopping_rounds 30 --random_state 42 --lgb_n_estimators 1000 --lgb_num_leaves 31 --lgb_learning_rate 0.04 --lgb_feature_fraction 0.7 --lgb_bagging_fraction 0.7 --lgb_bagging_freq 5 --lgb_min_child_samples 80 --rf_n_estimators 200 --rf_max_depth 10
 
-Expected: 94-97% AUC, 8-10 min, 6-8 GB RAM (Uses full 416K dataset)
+Expected: 90-93% AUC, 10-12 min, 6-8 GB RAM (Uses full 416K dataset)
 
-1.5.4 NET BEST LIGHTGBM
+1.5.4 NET CONSERVATIVE TRAINING
 Command:
-python train_malware_models.py --category Net --data_dir ember2024_merged_categories --output_dir best_lightgbm_dotnet --models lightgbm --cv_folds 7 --val_size 0.15 --early_stopping_rounds 100 --random_state 42 --lgb_n_estimators 4000 --lgb_num_leaves 63 --lgb_learning_rate 0.09 --lgb_feature_fraction 0.95 --lgb_bagging_fraction 0.95 --lgb_bagging_freq 3 --lgb_min_child_samples 20
+python train_malware_models.py --category Net --data_dir ember2024_ultra_focused_features --output_dir conservative_dotnet --models lightgbm xgboost randomforest --cv_folds 7 --val_size 0.25 --early_stopping_rounds 30 --random_state 42 --lgb_n_estimators 1000 --lgb_num_leaves 31 --lgb_learning_rate 0.04 --lgb_feature_fraction 0.7 --lgb_bagging_fraction 0.7 --lgb_bagging_freq 5 --lgb_min_child_samples 80 --rf_n_estimators 200 --rf_max_depth 10
 
-Expected: 95-98% AUC, 8-10 min, 6-8 GB RAM (Uses full 520K dataset)
+Expected: 91-94% AUC, 10-12 min, 6-8 GB RAM (Uses full 520K dataset)
 
-1.5.5 PDF BEST LIGHTGBM
+1.5.5 PDF CONSERVATIVE TRAINING
 Command:
-python train_malware_models.py --category PDF --data_dir ember2024_merged_categories --output_dir best_lightgbm_pdf --models lightgbm --cv_folds 7 --val_size 0.15 --early_stopping_rounds 100 --random_state 42 --lgb_n_estimators 3500 --lgb_num_leaves 31 --lgb_learning_rate 0.1 --lgb_feature_fraction 0.95 --lgb_bagging_fraction 0.95 --lgb_bagging_freq 3 --lgb_min_child_samples 15
+python train_malware_models.py --category PDF --data_dir ember2024_ultra_focused_features --output_dir conservative_pdf --models lightgbm xgboost randomforest --cv_folds 7 --val_size 0.25 --early_stopping_rounds 30 --random_state 42 --lgb_n_estimators 800 --lgb_num_leaves 15 --lgb_learning_rate 0.05 --lgb_feature_fraction 0.7 --lgb_bagging_fraction 0.7 --lgb_bagging_freq 5 --lgb_min_child_samples 50 --rf_n_estimators 150 --rf_max_depth 8
 
-Expected: 92-96% AUC, 4-6 min, 3-4 GB RAM (Uses full 104K dataset)
+Expected: 88-92% AUC, 6-8 min, 3-4 GB RAM (Uses full 104K dataset)
 
-1.5.6 ELF BEST LIGHTGBM
+1.5.6 ELF CONSERVATIVE TRAINING
 Command:
-python train_malware_models.py --category ELF --data_dir ember2024_merged_categories --output_dir best_lightgbm_elf --models lightgbm --cv_folds 7 --val_size 0.15 --early_stopping_rounds 100 --random_state 42 --lgb_n_estimators 3000 --lgb_num_leaves 31 --lgb_learning_rate 0.1 --lgb_feature_fraction 0.95 --lgb_bagging_fraction 0.95 --lgb_bagging_freq 3 --lgb_min_child_samples 10
+python train_malware_models.py --category ELF --data_dir ember2024_ultra_focused_features --output_dir conservative_elf --models lightgbm xgboost randomforest --cv_folds 7 --val_size 0.25 --early_stopping_rounds 30 --random_state 42 --lgb_n_estimators 600 --lgb_num_leaves 15 --lgb_learning_rate 0.05 --lgb_feature_fraction 0.7 --lgb_bagging_fraction 0.7 --lgb_bagging_freq 5 --lgb_min_child_samples 30 --rf_n_estimators 100 --rf_max_depth 8
 
-Expected: 90-95% AUC, 3-4 min, 2-3 GB RAM (Uses full 52K dataset)
+Expected: 86-90% AUC, 4-6 min, 2-3 GB RAM (Uses full 52K dataset)
 
 1.6 CATEGORY-SPECIFIC BEST XGBOOST TRAINING ⭐
 ----------------------------------------------
@@ -161,8 +161,115 @@ python train_malware_models.py --category ELF --data_dir ember2024_merged_catego
 
 Expected: 89-94% AUC, 4-6 min, 3-4 GB RAM (Uses full 52K dataset)
 
+1.7 MAXIMUM PERFORMANCE ALL-MODELS TRAINING ⭐⭐⭐
+--------------------------------------------------
+Purpose: Ultimate performance with all three models (LightGBM, XGBoost, Random Forest)
+Strategy: Optimized parameters for maximum accuracy while preventing overfitting
+Models: All three models trained simultaneously for comprehensive comparison
+
+1.7.1 WIN32 MAXIMUM PERFORMANCE (ALL MODELS)
+Command:
+python train_malware_models.py --category Win32 --data_dir ember2024_ultra_focused_features --output_dir ultimate_win32 --sample_size 1500000 --models lightgbm xgboost randomforest --cv_folds 7 --val_size 0.15 --early_stopping_rounds 100 --random_state 42 --lgb_n_estimators 4500 --lgb_num_leaves 63 --lgb_learning_rate 0.08 --lgb_feature_fraction 0.95 --lgb_bagging_fraction 0.95 --lgb_bagging_freq 3 --lgb_min_child_samples 25 --xgb_n_estimators 4000 --xgb_max_depth 7 --xgb_learning_rate 0.08 --xgb_subsample 0.95 --xgb_colsample_bytree 0.95 --xgb_min_child_weight 1 --xgb_reg_alpha 0.01 --xgb_reg_lambda 0.05 --rf_n_estimators 400 --rf_max_depth 12 --rf_min_samples_split 5 --rf_min_samples_leaf 3
+
+Expected: 97-99% AUC, 25-30 min, 14-18 GB RAM
+
+1.7.2 WIN64 MAXIMUM PERFORMANCE (ALL MODELS)
+Command:
+python train_malware_models.py --category Win64 --data_dir ember2024_ultra_focused_features --output_dir ultimate_win64 --sample_size 1000000 --models lightgbm xgboost randomforest --cv_folds 7 --val_size 0.15 --early_stopping_rounds 100 --random_state 42 --lgb_n_estimators 4000 --lgb_num_leaves 63 --lgb_learning_rate 0.08 --lgb_feature_fraction 0.95 --lgb_bagging_fraction 0.95 --lgb_bagging_freq 3 --lgb_min_child_samples 25 --xgb_n_estimators 3500 --xgb_max_depth 7 --xgb_learning_rate 0.08 --xgb_subsample 0.95 --xgb_colsample_bytree 0.95 --xgb_min_child_weight 1 --xgb_reg_alpha 0.01 --xgb_reg_lambda 0.05 --rf_n_estimators 350 --rf_max_depth 12 --rf_min_samples_split 5 --rf_min_samples_leaf 3
+
+Expected: 96-98% AUC, 20-25 min, 12-14 GB RAM
+
+1.7.3 APK MAXIMUM PERFORMANCE (ALL MODELS)
+Command:
+python train_malware_models.py --category APK --data_dir ember2024_ultra_focused_features --output_dir ultimate_apk --models lightgbm xgboost randomforest --cv_folds 7 --val_size 0.15 --early_stopping_rounds 100 --random_state 42 --lgb_n_estimators 4000 --lgb_num_leaves 63 --lgb_learning_rate 0.09 --lgb_feature_fraction 0.95 --lgb_bagging_fraction 0.95 --lgb_bagging_freq 3 --lgb_min_child_samples 20 --xgb_n_estimators 3500 --xgb_max_depth 7 --xgb_learning_rate 0.09 --xgb_subsample 0.95 --xgb_colsample_bytree 0.95 --xgb_min_child_weight 1 --xgb_reg_alpha 0.01 --xgb_reg_lambda 0.05 --rf_n_estimators 300 --rf_max_depth 12 --rf_min_samples_split 5 --rf_min_samples_leaf 3
+
+Expected: 94-97% AUC, 15-18 min, 8-10 GB RAM (Uses full 416K dataset)
+
+1.7.4 NET MAXIMUM PERFORMANCE (ALL MODELS)
+Command:
+python train_malware_models.py --category Net --data_dir ember2024_ultra_focused_features --output_dir ultimate_dotnet --models lightgbm xgboost randomforest --cv_folds 7 --val_size 0.15 --early_stopping_rounds 100 --random_state 42 --lgb_n_estimators 4000 --lgb_num_leaves 63 --lgb_learning_rate 0.09 --lgb_feature_fraction 0.95 --lgb_bagging_fraction 0.95 --lgb_bagging_freq 3 --lgb_min_child_samples 20 --xgb_n_estimators 3500 --xgb_max_depth 7 --xgb_learning_rate 0.09 --xgb_subsample 0.95 --xgb_colsample_bytree 0.95 --xgb_min_child_weight 1 --xgb_reg_alpha 0.01 --xgb_reg_lambda 0.05 --rf_n_estimators 300 --rf_max_depth 12 --rf_min_samples_split 5 --rf_min_samples_leaf 3
+
+Expected: 95-98% AUC, 15-18 min, 8-10 GB RAM (Uses full 520K dataset)
+
+1.7.5 PDF MAXIMUM PERFORMANCE (ALL MODELS)
+Command:
+python train_malware_models.py --category PDF --data_dir ember2024_ultra_focused_features --output_dir ultimate_pdf --models lightgbm xgboost randomforest --cv_folds 7 --val_size 0.15 --early_stopping_rounds 100 --random_state 42 --lgb_n_estimators 3500 --lgb_num_leaves 31 --lgb_learning_rate 0.1 --lgb_feature_fraction 0.95 --lgb_bagging_fraction 0.95 --lgb_bagging_freq 3 --lgb_min_child_samples 15 --xgb_n_estimators 3000 --xgb_max_depth 6 --xgb_learning_rate 0.1 --xgb_subsample 0.95 --xgb_colsample_bytree 0.95 --xgb_min_child_weight 1 --xgb_reg_alpha 0.01 --xgb_reg_lambda 0.05 --rf_n_estimators 250 --rf_max_depth 10 --rf_min_samples_split 5 --rf_min_samples_leaf 3
+
+Expected: 92-96% AUC, 8-10 min, 4-5 GB RAM (Uses full 104K dataset)
+
+1.7.6 ELF MAXIMUM PERFORMANCE (ALL MODELS)
+Command:
+python train_malware_models.py --category ELF --data_dir ember2024_ultra_focused_features --output_dir ultimate_elf --models lightgbm xgboost randomforest --cv_folds 7 --val_size 0.15 --early_stopping_rounds 100 --random_state 42 --lgb_n_estimators 2500 --lgb_num_leaves 31 --lgb_learning_rate 0.1 --lgb_feature_fraction 0.95 --lgb_bagging_fraction 0.95 --lgb_bagging_freq 3 --lgb_min_child_samples 10 --xgb_n_estimators 2500 --xgb_max_depth 6 --xgb_learning_rate 0.1 --xgb_subsample 0.95 --xgb_colsample_bytree 0.95 --xgb_min_child_weight 1 --xgb_reg_alpha 0.01 --xgb_reg_lambda 0.05 --rf_n_estimators 200 --rf_max_depth 10 --rf_min_samples_split 3 --rf_min_samples_leaf 2
+
+Expected: 90-95% AUC, 6-8 min, 3-4 GB RAM (Uses full 52K dataset)
+
+1.8 INDIVIDUAL MODEL OPTIMIZATION ⭐⭐
+------------------------------------
+Purpose: Best single-model performance for each category and model type
+Strategy: Model-specific parameter optimization for maximum accuracy
+
+1.8.1 BEST LIGHTGBM INDIVIDUAL TRAINING
+
+WIN32 BEST LIGHTGBM:
+python train_malware_models.py --category Win32 --data_dir ember2024_ultra_focused_features --output_dir best_lgb_win32 --sample_size 1500000 --models lightgbm --cv_folds 7 --val_size 0.15 --early_stopping_rounds 100 --random_state 42 --lgb_n_estimators 5000 --lgb_num_leaves 63 --lgb_learning_rate 0.08 --lgb_feature_fraction 0.95 --lgb_bagging_fraction 0.95 --lgb_bagging_freq 3 --lgb_min_child_samples 25
+
+WIN64 BEST LIGHTGBM:
+python train_malware_models.py --category Win64 --data_dir ember2024_ultra_focused_features --output_dir best_lgb_win64 --sample_size 1000000 --models lightgbm --cv_folds 7 --val_size 0.15 --early_stopping_rounds 100 --random_state 42 --lgb_n_estimators 4500 --lgb_num_leaves 63 --lgb_learning_rate 0.08 --lgb_feature_fraction 0.95 --lgb_bagging_fraction 0.95 --lgb_bagging_freq 3 --lgb_min_child_samples 25
+
+APK BEST LIGHTGBM:
+python train_malware_models.py --category APK --data_dir ember2024_ultra_focused_features --output_dir best_lgb_apk --models lightgbm --cv_folds 7 --val_size 0.15 --early_stopping_rounds 100 --random_state 42 --lgb_n_estimators 4000 --lgb_num_leaves 63 --lgb_learning_rate 0.09 --lgb_feature_fraction 0.95 --lgb_bagging_fraction 0.95 --lgb_bagging_freq 3 --lgb_min_child_samples 20
+
+NET BEST LIGHTGBM:
+python train_malware_models.py --category Net --data_dir ember2024_ultra_focused_features --output_dir best_lgb_dotnet --models lightgbm --cv_folds 7 --val_size 0.15 --early_stopping_rounds 100 --random_state 42 --lgb_n_estimators 4000 --lgb_num_leaves 63 --lgb_learning_rate 0.09 --lgb_feature_fraction 0.95 --lgb_bagging_fraction 0.95 --lgb_bagging_freq 3 --lgb_min_child_samples 20
+
+PDF BEST LIGHTGBM:
+python train_malware_models.py --category PDF --data_dir ember2024_ultra_focused_features --output_dir best_lgb_pdf --models lightgbm --cv_folds 7 --val_size 0.15 --early_stopping_rounds 100 --random_state 42 --lgb_n_estimators 3500 --lgb_num_leaves 31 --lgb_learning_rate 0.1 --lgb_feature_fraction 0.95 --lgb_bagging_fraction 0.95 --lgb_bagging_freq 3 --lgb_min_child_samples 15
+
+ELF BEST LIGHTGBM:
+python train_malware_models.py --category ELF --data_dir ember2024_ultra_focused_features --output_dir best_lgb_elf --models lightgbm --cv_folds 7 --val_size 0.15 --early_stopping_rounds 100 --random_state 42 --lgb_n_estimators 2500 --lgb_num_leaves 31 --lgb_learning_rate 0.1 --lgb_feature_fraction 0.95 --lgb_bagging_fraction 0.95 --lgb_bagging_freq 3 --lgb_min_child_samples 10
+
+1.8.2 BEST XGBOOST INDIVIDUAL TRAINING
+
+WIN32 BEST XGBOOST:
+python train_malware_models.py --category Win32 --data_dir ember2024_ultra_focused_features --output_dir best_xgb_win32 --sample_size 1500000 --models xgboost --cv_folds 7 --val_size 0.15 --early_stopping_rounds 100 --random_state 42 --xgb_n_estimators 4000 --xgb_max_depth 7 --xgb_learning_rate 0.08 --xgb_subsample 0.95 --xgb_colsample_bytree 0.95 --xgb_min_child_weight 1 --xgb_reg_alpha 0.01 --xgb_reg_lambda 0.05
+
+WIN64 BEST XGBOOST:
+python train_malware_models.py --category Win64 --data_dir ember2024_ultra_focused_features --output_dir best_xgb_win64 --sample_size 1000000 --models xgboost --cv_folds 7 --val_size 0.15 --early_stopping_rounds 100 --random_state 42 --xgb_n_estimators 3500 --xgb_max_depth 7 --xgb_learning_rate 0.08 --xgb_subsample 0.95 --xgb_colsample_bytree 0.95 --xgb_min_child_weight 1 --xgb_reg_alpha 0.01 --xgb_reg_lambda 0.05
+
+APK BEST XGBOOST:
+python train_malware_models.py --category APK --data_dir ember2024_ultra_focused_features --output_dir best_xgb_apk --models xgboost --cv_folds 7 --val_size 0.15 --early_stopping_rounds 100 --random_state 42 --xgb_n_estimators 3500 --xgb_max_depth 7 --xgb_learning_rate 0.09 --xgb_subsample 0.95 --xgb_colsample_bytree 0.95 --xgb_min_child_weight 1 --xgb_reg_alpha 0.01 --xgb_reg_lambda 0.05
+
+NET BEST XGBOOST:
+python train_malware_models.py --category Net --data_dir ember2024_ultra_focused_features --output_dir best_xgb_dotnet --models xgboost --cv_folds 7 --val_size 0.15 --early_stopping_rounds 100 --random_state 42 --xgb_n_estimators 3500 --xgb_max_depth 7 --xgb_learning_rate 0.09 --xgb_subsample 0.95 --xgb_colsample_bytree 0.95 --xgb_min_child_weight 1 --xgb_reg_alpha 0.01 --xgb_reg_lambda 0.05
+
+PDF BEST XGBOOST:
+python train_malware_models.py --category PDF --data_dir ember2024_ultra_focused_features --output_dir best_xgb_pdf --models xgboost --cv_folds 7 --val_size 0.15 --early_stopping_rounds 100 --random_state 42 --xgb_n_estimators 3000 --xgb_max_depth 6 --xgb_learning_rate 0.1 --xgb_subsample 0.95 --xgb_colsample_bytree 0.95 --xgb_min_child_weight 1 --xgb_reg_alpha 0.01 --xgb_reg_lambda 0.05
+
+ELF BEST XGBOOST:
+python train_malware_models.py --category ELF --data_dir ember2024_ultra_focused_features --output_dir best_xgb_elf --models xgboost --cv_folds 7 --val_size 0.15 --early_stopping_rounds 100 --random_state 42 --xgb_n_estimators 2500 --xgb_max_depth 6 --xgb_learning_rate 0.1 --xgb_subsample 0.95 --xgb_colsample_bytree 0.95 --xgb_min_child_weight 1 --xgb_reg_alpha 0.01 --xgb_reg_lambda 0.05
+
+1.8.3 BEST RANDOM FOREST INDIVIDUAL TRAINING
+
+WIN32 BEST RANDOM FOREST:
+python train_malware_models.py --category Win32 --data_dir ember2024_ultra_focused_features --output_dir best_rf_win32 --sample_size 1500000 --models randomforest --cv_folds 7 --val_size 0.15 --random_state 42 --rf_n_estimators 500 --rf_max_depth 15 --rf_min_samples_split 3 --rf_min_samples_leaf 2 --rf_max_features sqrt --rf_bootstrap True --rf_oob_score True
+
+WIN64 BEST RANDOM FOREST:
+python train_malware_models.py --category Win64 --data_dir ember2024_ultra_focused_features --output_dir best_rf_win64 --sample_size 1000000 --models randomforest --cv_folds 7 --val_size 0.15 --random_state 42 --rf_n_estimators 400 --rf_max_depth 15 --rf_min_samples_split 3 --rf_min_samples_leaf 2 --rf_max_features sqrt --rf_bootstrap True --rf_oob_score True
+
+APK BEST RANDOM FOREST:
+python train_malware_models.py --category APK --data_dir ember2024_ultra_focused_features --output_dir best_rf_apk --models randomforest --cv_folds 7 --val_size 0.15 --random_state 42 --rf_n_estimators 350 --rf_max_depth 15 --rf_min_samples_split 3 --rf_min_samples_leaf 2 --rf_max_features sqrt --rf_bootstrap True --rf_oob_score True
+
+NET BEST RANDOM FOREST:
+python train_malware_models.py --category Net --data_dir ember2024_ultra_focused_features --output_dir best_rf_dotnet --models randomforest --cv_folds 7 --val_size 0.15 --random_state 42 --rf_n_estimators 350 --rf_max_depth 15 --rf_min_samples_split 3 --rf_min_samples_leaf 2 --rf_max_features sqrt --rf_bootstrap True --rf_oob_score True
+
+PDF BEST RANDOM FOREST:
+python train_malware_models.py --category PDF --data_dir ember2024_ultra_focused_features --output_dir best_rf_pdf --models randomforest --cv_folds 7 --val_size 0.15 --random_state 42 --rf_n_estimators 300 --rf_max_depth 12 --rf_min_samples_split 3 --rf_min_samples_leaf 2 --rf_max_features sqrt --rf_bootstrap True --rf_oob_score True
+
+ELF BEST RANDOM FOREST:
+python train_malware_models.py --category ELF --data_dir ember2024_ultra_focused_features --output_dir best_rf_elf --models randomforest --cv_folds 7 --val_size 0.15 --random_state 42 --rf_n_estimators 250 --rf_max_depth 12 --rf_min_samples_split 2 --rf_min_samples_leaf 1 --rf_max_features sqrt --rf_bootstrap True --rf_oob_score True
+
 ===============================================================================
-2. SPECIALIZED TRAINING COMMANDS
+2. PRODUCTION-READY TRAINING COMMANDS
 ===============================================================================
 
 2.1 CONSERVATIVE TRAINING (MAXIMUM ANTI-OVERFITTING)
@@ -259,25 +366,35 @@ Sample Distribution: ~96% of available .NET samples (520K total)
 4. PARAMETER OPTIMIZATION GUIDE
 ===============================================================================
 
-4.1 ANTI-OVERFITTING PARAMETERS
--------------------------------
+4.1 ANTI-OVERFITTING PARAMETERS (UPDATED)
+-----------------------------------------
 
 LightGBM Anti-Overfitting:
-- learning_rate: 0.03-0.05 (lower = less overfitting)
-- feature_fraction: 0.7-0.8 (use subset of features)
-- bagging_fraction: 0.7-0.8 (use subset of data)
-- min_child_samples: 50-100 (prevent small leaves)
-- num_leaves: 31 or less (control tree complexity)
-- early_stopping_rounds: 30-50 (stop when no improvement)
+- learning_rate: 0.02-0.04 (ultra-low for stability)
+- feature_fraction: 0.6-0.7 (aggressive feature subsampling)
+- bagging_fraction: 0.6-0.7 (aggressive data subsampling)
+- min_child_samples: 80-150 (prevent small leaves)
+- num_leaves: 15-31 (control tree complexity)
+- early_stopping_rounds: 20-30 (stop early when no improvement)
+- bagging_freq: 5-7 (frequent bagging for variance reduction)
 
 XGBoost Anti-Overfitting:
-- learning_rate: 0.03-0.05 (lower = less overfitting)
-- max_depth: 4-5 (limit tree depth)
-- subsample: 0.7-0.8 (use subset of samples)
-- colsample_bytree: 0.7-0.8 (use subset of features)
-- min_child_weight: 3-5 (prevent small leaves)
-- reg_alpha: 0.1-0.2 (L1 regularization)
-- reg_lambda: 1.0-2.0 (L2 regularization)
+- learning_rate: 0.02-0.04 (ultra-low for stability)
+- max_depth: 3-4 (severely limit tree depth)
+- subsample: 0.6-0.7 (aggressive sample subsampling)
+- colsample_bytree: 0.6-0.7 (aggressive feature subsampling)
+- min_child_weight: 5-10 (prevent small leaves)
+- reg_alpha: 0.2-0.5 (strong L1 regularization)
+- reg_lambda: 2.0-5.0 (strong L2 regularization)
+
+Random Forest Anti-Overfitting:
+- n_estimators: 100-300 (moderate ensemble size)
+- max_depth: 8-12 (limit tree depth)
+- min_samples_split: 10-20 (require more samples to split)
+- min_samples_leaf: 5-10 (require more samples in leaves)
+- max_features: 'sqrt' or 'log2' (feature subsampling)
+- bootstrap: True (enable bootstrapping)
+- oob_score: True (out-of-bag validation)
 
 4.2 PERFORMANCE OPTIMIZATION
 ----------------------------
@@ -484,6 +601,26 @@ Solutions:
 
 Expected Performance Ranges:
 
+ULTIMATE ALL-MODELS TRAINING ⭐⭐⭐ (Section 1.7):
+Category         | Expected AUC | Training Time | Memory Usage
+---------------- | ------------ | ------------- | ------------
+Win32 Ultimate   | 0.97-0.99    | 25-30 min     | 14-18 GB
+Win64 Ultimate   | 0.96-0.98    | 20-25 min     | 12-14 GB
+APK Ultimate     | 0.94-0.97    | 15-18 min     | 8-10 GB
+PDF Ultimate     | 0.92-0.96    | 8-10 min      | 4-5 GB
+ELF Ultimate     | 0.90-0.95    | 6-8 min       | 3-4 GB
+.NET Ultimate    | 0.95-0.98    | 15-18 min     | 8-10 GB
+
+INDIVIDUAL MODEL OPTIMIZATION ⭐⭐ (Section 1.8):
+Category         | LightGBM AUC | XGBoost AUC  | Random Forest AUC
+---------------- | ------------ | ------------ | -----------------
+Win32            | 0.98-0.99    | 0.97-0.98    | 0.95-0.97
+Win64            | 0.97-0.98    | 0.96-0.97    | 0.94-0.96
+APK              | 0.95-0.97    | 0.94-0.96    | 0.92-0.95
+PDF              | 0.93-0.96    | 0.92-0.95    | 0.90-0.93
+ELF              | 0.91-0.95    | 0.90-0.94    | 0.88-0.92
+.NET             | 0.96-0.98    | 0.95-0.97    | 0.93-0.96
+
 STANDARD TRAINING:
 Category         | Expected AUC | Training Time | Memory Usage
 ---------------- | ------------ | ------------- | ------------
@@ -517,9 +654,35 @@ ELF Best XGB     | 0.89-0.94    | 4-6 min       | 3-4 GB
 
 Note: Performance varies based on system specifications and parameters used.
 ⭐ Best configurations optimized for maximum accuracy with proper regularization.
+⭐⭐ Individual model optimization for specialized use cases.  
+⭐⭐⭐ Ultimate performance with all three models for comprehensive comparison.
 
 ===============================================================================
-10. CONTACT AND SUPPORT
+10. QUICK REFERENCE SUMMARY
+===============================================================================
+
+RECOMMENDED TRAINING HIERARCHY:
+1. Ultimate All-Models Training (Section 1.7) - Best overall performance
+2. Individual Model Optimization (Section 1.8) - Specialized single-model training
+3. Conservative Anti-Overfitting (Section 1.5) - Production deployment
+4. Production-Ready Training (Section 1.1-1.4) - Balanced performance/stability
+
+KEY FEATURES ADDED:
+✅ All three models training simultaneously
+✅ Individual model optimization for each category
+✅ Maximum performance configurations
+✅ Overfitting prevention strategies
+✅ Comprehensive parameter tuning
+✅ Memory and time optimization
+✅ Performance benchmarks for all scenarios
+
+TOTAL COMMANDS PROVIDED: 50+ optimized training scenarios
+CATEGORIES COVERED: Win32, Win64, APK, PDF, ELF, .NET
+MODELS SUPPORTED: LightGBM, XGBoost, Random Forest
+ANTI-OVERFITTING: Conservative parameters and robust validation
+
+===============================================================================
+11. CONTACT AND SUPPORT
 ===============================================================================
 
 For issues with training commands:
@@ -536,7 +699,8 @@ Documentation: DATASET_STATUS_REPORT.md
 END OF GUIDE
 ===============================================================================
 
-Last Updated: August 28, 2025
-Version: 1.0
-Total Commands Provided: 12 main scenarios + variations
+Last Updated: September 5, 2025
+Version: 2.0 - Enhanced with All-Models Training
+Total Commands Provided: 50+ comprehensive training scenarios
 Compatible with: EMBER2024 Ultra-Focused Feature Dataset
+New Features: Ultimate all-models training, individual optimization, enhanced anti-overfitting
